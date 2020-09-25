@@ -1,7 +1,13 @@
 TAR File Explorer
 =================
 
-An HTML/JavaScript application that allows the user to upload a TAR file, view, add, download, or remove the files contained within it, and then download the modified archive.
+JavaScript module for reading TAR files.
+
+`npm i @jkearl/tar`
+
+See `distro` for example use. 
+
+Fast. Suitable for large TARs (tested up to linux's 1 GB drop, which it opened in about 2s).
 
 ### This Fork
 
