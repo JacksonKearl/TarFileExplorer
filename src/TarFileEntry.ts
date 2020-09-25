@@ -1,4 +1,3 @@
-import { ByteHelper } from './ByteHelper'
 import { ByteStream } from './ByteStream'
 import { TarFile } from './TarFile'
 import { TarFileEntryHeader } from './TarFileEntryHeader'
@@ -7,7 +6,7 @@ export class TarFileEntry {
 	header: TarFileEntryHeader
 	dataAsBytes: any
 
-	constructor(header: TarFileEntryHeader, dataAsBytes: Uint8Array) {
+	private constructor(header: TarFileEntryHeader, dataAsBytes: Uint8Array) {
 		this.header = header
 		this.dataAsBytes = dataAsBytes
 	}
@@ -71,9 +70,9 @@ export class TarFileEntry {
 
 	// instance methods
 
-	remove(event: any) {
-		throw Error('Not yet implemented!') // todo
-	}
+	// remove(event: any) {
+	// 	throw Error('Not yet implemented!') // todo
+	// }
 
 	// toBytes() {
 	// 	let entryAsBytes: number[] = []
@@ -102,24 +101,24 @@ export class TarFileEntry {
 
 	// strings
 
-	toString() {
-		const newline = '\n'
+	// toString() {
+	// 	const newline = '\n'
 
-		const headerAsString = this.header.toString()
+	// 	const headerAsString = this.header.toString()
 
-		const dataAsHexadecimalString = ByteHelper.bytesToStringUTF8(this.dataAsBytes)
+	// 	const dataAsHexadecimalString = ByteHelper.bytesToStringUTF8(this.dataAsBytes)
 
-		let returnValue =
-			'[TarFileEntry]' +
-			newline +
-			headerAsString +
-			'[Data]' +
-			dataAsHexadecimalString +
-			'[/Data]' +
-			newline +
-			'[/TarFileEntry]' +
-			newline
+	// 	let returnValue =
+	// 		'[TarFileEntry]' +
+	// 		newline +
+	// 		headerAsString +
+	// 		'[Data]' +
+	// 		dataAsHexadecimalString +
+	// 		'[/Data]' +
+	// 		newline +
+	// 		'[/TarFileEntry]' +
+	// 		newline
 
-		return returnValue
-	}
+	// 	return returnValue
+	// }
 }

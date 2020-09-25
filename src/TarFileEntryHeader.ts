@@ -229,23 +229,23 @@ export class TarFileEntryHeader {
 
 	// strings
 
-	toString() {
-		const newline = '\n'
+	// toString() {
+	// 	const newline = '\n'
 
-		let returnValue =
-			'[TarFileEntryHeader ' +
-			"fileName='" +
-			this.fileName +
-			"' " +
-			"typeFlag='" +
-			(this.typeFlag == null ? 'err' : this.typeFlag.name) +
-			"' " +
-			"fileSizeInBytes='" +
-			this.fileSizeInBytes +
-			"' " +
-			']' +
-			newline
+	// 	let returnValue =
+	// 		'[TarFileEntryHeader ' +
+	// 		"fileName='" +
+	// 		this.fileName +
+	// 		"' " +
+	// 		"typeFlag='" +
+	// 		(this.typeFlag == null ? 'err' : this.typeFlag.name) +
+	// 		"' " +
+	// 		"fileSizeInBytes='" +
+	// 		this.fileSizeInBytes +
+	// 		"' " +
+	// 		']' +
+	// 		newline
 
-		return returnValue
-	}
+	// 	return returnValue
+	// }
 }

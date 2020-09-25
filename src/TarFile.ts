@@ -4,11 +4,9 @@ import { TarFileEntryHeader } from './TarFileEntryHeader'
 import { TarFileTypeFlag } from './TarFileTypeFlag'
 
 export class TarFile {
-	fileName: string
 	entries: TarFileEntry[]
 
-	constructor(fileName: string, entries: TarFileEntry[]) {
-		this.fileName = fileName
+	private constructor(entries: TarFileEntry[]) {
 		this.entries = entries
 	}
 
@@ -18,7 +16,7 @@ export class TarFile {
 
 	// static methods
 
-	static fromBytes(fileName: string, bytes: Uint8Array) {
+	static fromBytes(bytes: Uint8Array) {
 		const reader = new ByteStream(bytes)
 
 		const entries = []
@@ -54,23 +52,22 @@ export class TarFile {
 			}
 		}
 
-		let returnValue = new TarFile(fileName, entries)
+		let returnValue = new TarFile(entries)
 
 		returnValue.consolidateLongPathEntries()
 
 		return returnValue
 	}
 
-	static create(fileName: any) {
-		return new TarFile(
-			fileName,
-			[], // entries
-		)
-	}
+	// static create(fileName: any) {
+	// 	return new TarFile(
+	// 		[], // entries
+	// 	)
+	// }
 
 	// instance methods
 
-	consolidateLongPathEntries() {
+	private consolidateLongPathEntries() {
 		// TAR file entries with paths longer than 99 chars require cheating,
 		// by prepending them with a entry of type "L" whose data contains the path.
 		const typeFlagLongPathName = TarFileTypeFlag.Instances().LongFilePath.name
@@ -153,19 +150,19 @@ export class TarFile {
 
 	// strings
 
-	toString() {
-		const newline = '\n'
+	// private toString() {
+	// 	const newline = '\n'
 
-		let returnValue = '[TarFile]' + newline
+	// 	let returnValue = '[TarFile]' + newline
 
-		for (let i = 0; i < this.entries.length; i++) {
-			const entry = this.entries[i]
-			const entryAsString = entry.toString()
-			returnValue += entryAsString
-		}
+	// 	for (let i = 0; i < this.entries.length; i++) {
+	// 		const entry = this.entries[i]
+	// 		const entryAsString = entry.toString()
+	// 		returnValue += entryAsString
+	// 	}
 
-		returnValue += '[/TarFile]' + newline
+	// 	returnValue += '[/TarFile]' + newline
 
-		return returnValue
-	}
+	// 	return returnValue
+	// }
 }

@@ -1,13 +1,13 @@
-async function openTarball(tarball) {
+function openTarball(tarball) {
   const start = performance.now()
   var tarFile = TarUtils.readTar(tarball);
   console.log(`reading tarball with length ${tarball.length} took ${performance.now() - start}ms`)
   return tarFile
 }
 
-async function unzipTarball(tarballGz) {
+function unzipTarball(tarballGz) {
   const start = performance.now()
-  const tarball = await pako.ungzip(tarballGz)
+  const tarball = pako.ungzip(tarballGz)
   console.log(`Unzipping tarball with length ${tarballGz.byteLength}->${tarball.length} took ${performance.now() - start}ms`);
   return tarball;
 }
@@ -35,8 +35,12 @@ const download = async () => {
   return Promise.all(repos.map(downloadTarballGz))
 }
 
-
 const profile = async (downloads) => {
-  const unzips = await Promise.all(downloads.map(download => unzipTarball(download)))
-  const opens = await Promise.all(unzips.map(tarball => openTarball(tarball)))
+  const unzips = downloads.map(download => unzipTarball(download))
+  unzips.map(tarball => {
+    for (let i = 0; i < 10; i++) {
+      openTarball(tarball);
+    }
+  })
+
 }
