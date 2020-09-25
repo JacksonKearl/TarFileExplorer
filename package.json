@@ -1,8 +1,12 @@
 {
-  "name": "@jacksonkearl/tar",
-  "version": "1.0.0",
+  "name": "@jkearl/tar",
+  "version": "1.0.1",
   "description": "Tar utils. Fork of github/thiscouldbebetter/TarFileExplorer",
-  "main": "build/out.js",
+  "main": "build/index.js",
+  "files": [
+    "build/**"
+  ],
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

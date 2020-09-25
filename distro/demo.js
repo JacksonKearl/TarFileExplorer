@@ -30,7 +30,8 @@ const download = async () => {
     'jacksonkearl/mixedCase',
     'microsoft/vscode-js-debug',
     'microsoft/vscode',
-    'microsoft/typescript'
+    'microsoft/typescript',
+    // 'torvalds/linux'
   ]
   return Promise.all(repos.map(downloadTarballGz))
 }

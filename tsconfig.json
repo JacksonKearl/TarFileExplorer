@@ -1,6 +1,19 @@
 {
-	"extends": "./tsconfig.base.json",
-	"exclude": [
-		"**/*.test.ts",
+	"compilerOptions": {
+		"target": "ES6",
+		"strict": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"removeComments": true,
+		"sourceMap": true,
+		"declaration": true,
+		"outDir": "build",
+		"lib": [
+			"DOM",
+			"es2020"
+		]
+	},
+	"include": [
+		"src",
 	]
 }
