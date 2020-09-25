@@ -19,6 +19,7 @@ export class TarFileEntryHeader {
 	deviceNumberMajor: string
 	deviceNumberMinor: string
 	filenamePrefix: string
+	fullFileName: string
 
 	private constructor(
 		fileName: string,
@@ -54,6 +55,7 @@ export class TarFileEntryHeader {
 		this.deviceNumberMajor = deviceNumberMajor
 		this.deviceNumberMinor = deviceNumberMinor
 		this.filenamePrefix = filenamePrefix
+		this.fullFileName = filenamePrefix + fileName
 	}
 
 	// static methods

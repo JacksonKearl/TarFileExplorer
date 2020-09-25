@@ -4,7 +4,7 @@ import { TarFileEntryHeader } from './TarFileEntryHeader'
 
 export class TarFileEntry {
 	header: TarFileEntryHeader
-	dataAsBytes: any
+	dataAsBytes: Uint8Array
 
 	private constructor(header: TarFileEntryHeader, dataAsBytes: Uint8Array) {
 		this.header = header

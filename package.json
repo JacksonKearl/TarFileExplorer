@@ -1,6 +1,6 @@
 {
   "name": "@jkearl/tar",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Tar utils. Fork of github/thiscouldbebetter/TarFileExplorer",
   "main": "build/index.js",
   "files": [
