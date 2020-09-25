@@ -1,0 +1,34 @@
+{
+  "name": "@jacksonkearl/tar",
+  "version": "1.0.0",
+  "description": "Tar utils. Fork of github/thiscouldbebetter/TarFileExplorer",
+  "main": "build/out.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacksonKearl/TarFileExplorer.git"
+  },
+  "author": "JacksonKearl, thiscouldbebetter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JacksonKearl/TarFileExplorer/issues"
+  },
+  "homepage": "https://github.com/JacksonKearl/TarFileExplorer#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.2",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "rollup": "^2.28.2",
+    "chai": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "mocha": "^8.1.3",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3"
+  }
+}
