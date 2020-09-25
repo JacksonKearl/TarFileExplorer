@@ -4,7 +4,7 @@
     "strict": true,
     "module": "ES6",
     "moduleResolution": "node",
-    "removeComments": false,
+    "removeComments": true,
     "resolveJsonModule": true,
     "sourceMap": true,
     "declaration": true,
@@ -14,7 +14,7 @@
       "es2020"
     ]
   },
-  "exclude": [
-    "**/*.test.ts",
+  "include": [
+    "src",
   ]
 }

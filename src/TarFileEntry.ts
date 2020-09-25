@@ -1,5 +1,5 @@
 import { ByteStream } from './ByteStream'
-import { TarFile } from './TarFile'
+import * as Constants from './Constants'
 import { TarFileEntryHeader } from './TarFileEntryHeader'
 
 export class TarFileEntry {
@@ -32,7 +32,7 @@ export class TarFileEntry {
 	// }
 
 	static fromBytes(chunkAsBytes: Uint8Array, reader: ByteStream) {
-		const chunkSize = TarFile.ChunkSize
+		const chunkSize = Constants.ChunkSize
 
 		const header = TarFileEntryHeader.fromBytes(chunkAsBytes)
 

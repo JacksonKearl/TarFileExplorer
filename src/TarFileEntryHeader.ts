@@ -56,9 +56,6 @@ export class TarFileEntryHeader {
 		this.filenamePrefix = filenamePrefix
 	}
 
-	static FileNameMaxLength = 99
-	static SizeInBytes = 500
-
 	// static methods
 
 	// static default() {

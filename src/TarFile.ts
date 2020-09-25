@@ -1,6 +1,6 @@
 import { ByteStream } from './ByteStream'
+import * as Constants from './Constants'
 import { TarFileEntry } from './TarFileEntry'
-import { TarFileEntryHeader } from './TarFileEntryHeader'
 import { TarFileTypeFlag } from './TarFileTypeFlag'
 
 export class TarFile {
@@ -10,10 +10,6 @@ export class TarFile {
 		this.entries = entries
 	}
 
-	// constants
-
-	static ChunkSize = 512
-
 	// static methods
 
 	static fromBytes(bytes: Uint8Array) {
@@ -21,7 +17,7 @@ export class TarFile {
 
 		const entries = []
 
-		const chunkSize = TarFile.ChunkSize
+		const chunkSize = Constants.ChunkSize
 
 		let numberOfConsecutiveZeroChunks = 0
 
