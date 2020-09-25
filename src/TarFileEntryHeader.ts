@@ -8,7 +8,7 @@ export class TarFileEntryHeader {
 	fileMode: string
 	userIDOfOwner: string
 	userIDOfGroup: string
-	timeModifiedInUnixFormat: number[]
+	timeModifiedInUnixFormat: Uint8Array
 	checksum: number
 	typeFlag: TarFileTypeFlag | undefined
 	nameOfLinkedFile: string
@@ -26,7 +26,7 @@ export class TarFileEntryHeader {
 		userIDOfOwner: string,
 		userIDOfGroup: string,
 		fileSizeInBytes: number,
-		timeModifiedInUnixFormat: number[],
+		timeModifiedInUnixFormat: Uint8Array,
 		checksum: number,
 		typeFlag: TarFileTypeFlag | undefined,
 		nameOfLinkedFile: string,
@@ -61,61 +61,61 @@ export class TarFileEntryHeader {
 
 	// static methods
 
-	static default() {
-		const now = +new Date()
-		const unixEpoch = +new Date(1970, 1, 1)
-		const millisecondsSinceUnixEpoch = now - unixEpoch
-		const secondsSinceUnixEpoch = Math.floor(millisecondsSinceUnixEpoch / 1000)
-		const secondsSinceUnixEpochAsStringOctal = padRight(secondsSinceUnixEpoch.toString(8), 12, '\0')
-		const timeModifiedInUnixFormat: number[] = []
-		for (let i = 0; i < secondsSinceUnixEpochAsStringOctal.length; i++) {
-			const digitAsASCIICode = secondsSinceUnixEpochAsStringOctal.charCodeAt(i)
-			timeModifiedInUnixFormat.push(digitAsASCIICode)
-		}
+	// static default() {
+	// 	const now = +new Date()
+	// 	const unixEpoch = +new Date(1970, 1, 1)
+	// 	const millisecondsSinceUnixEpoch = now - unixEpoch
+	// 	const secondsSinceUnixEpoch = Math.floor(millisecondsSinceUnixEpoch / 1000)
+	// 	const secondsSinceUnixEpochAsStringOctal = padRight(secondsSinceUnixEpoch.toString(8), 12, '\0')
+	// 	const timeModifiedInUnixFormat: number[] = []
+	// 	for (let i = 0; i < secondsSinceUnixEpochAsStringOctal.length; i++) {
+	// 		const digitAsASCIICode = secondsSinceUnixEpochAsStringOctal.charCodeAt(i)
+	// 		timeModifiedInUnixFormat.push(digitAsASCIICode)
+	// 	}
 
-		let returnValue = new TarFileEntryHeader(
-			padRight('', 100, '\0'), // fileName
-			'0100777', // fileMode
-			'0000000', // userIDOfOwner
-			'0000000', // userIDOfGroup
-			0, // fileSizeInBytes
-			timeModifiedInUnixFormat,
-			0, // checksum
-			TarFileTypeFlag.Instances().Normal,
-			'', // nameOfLinkedFile,
-			'ustar', // uStarIndicator,
-			'00', // uStarVersion,
-			'', // userNameOfOwner,
-			'', // groupNameOfOwner,
-			'', // deviceNumberMajor,
-			'', // deviceNumberMinor,
-			'', // filenamePrefix
-		)
+	// 	let returnValue = new TarFileEntryHeader(
+	// 		padRight('', 100, '\0'), // fileName
+	// 		'0100777', // fileMode
+	// 		'0000000', // userIDOfOwner
+	// 		'0000000', // userIDOfGroup
+	// 		0, // fileSizeInBytes
+	// 		timeModifiedInUnixFormat,
+	// 		0, // checksum
+	// 		TarFileTypeFlag.Instances().Normal,
+	// 		'', // nameOfLinkedFile,
+	// 		'ustar', // uStarIndicator,
+	// 		'00', // uStarVersion,
+	// 		'', // userNameOfOwner,
+	// 		'', // groupNameOfOwner,
+	// 		'', // deviceNumberMajor,
+	// 		'', // deviceNumberMinor,
+	// 		'', // filenamePrefix
+	// 	)
 
-		return returnValue
-	}
+	// 	return returnValue
+	// }
 
-	static directoryNew(directoryName: any) {
-		const header = TarFileEntryHeader.default()
-		header.fileName = directoryName
-		header.typeFlag = TarFileTypeFlag.Instances().Directory
-		header.fileSizeInBytes = 0
-		header.checksumCalculate()
+	// static directoryNew(directoryName: any) {
+	// 	const header = TarFileEntryHeader.default()
+	// 	header.fileName = directoryName
+	// 	header.typeFlag = TarFileTypeFlag.Instances().Directory
+	// 	header.fileSizeInBytes = 0
+	// 	header.checksumCalculate()
 
-		return header
-	}
+	// 	return header
+	// }
 
-	static fileNew(fileName: any, fileContentsAsBytes: string | any[]) {
-		const header = TarFileEntryHeader.default()
-		header.fileName = fileName
-		header.typeFlag = TarFileTypeFlag.Instances().Normal
-		header.fileSizeInBytes = fileContentsAsBytes.length
-		header.checksumCalculate()
+	// static fileNew(fileName: any, fileContentsAsBytes: string | any[]) {
+	// 	const header = TarFileEntryHeader.default()
+	// 	header.fileName = fileName
+	// 	header.typeFlag = TarFileTypeFlag.Instances().Normal
+	// 	header.fileSizeInBytes = fileContentsAsBytes.length
+	// 	header.checksumCalculate()
 
-		return header
-	}
+	// 	return header
+	// }
 
-	static fromBytes(bytes: number[]) {
+	static fromBytes(bytes: Uint8Array) {
 		const reader = new ByteStream(bytes)
 
 		const fileName = reader.readString(100).trim()
@@ -168,64 +168,64 @@ export class TarFileEntryHeader {
 
 	// instance methods
 
-	checksumCalculate() {
-		const thisAsBytes = this.toBytes()
+	// checksumCalculate() {
+	// 	const thisAsBytes = this.toBytes()
 
-		// The checksum is the sum of all bytes in the header,
-		// except we obviously can't include the checksum itself.
-		// So it's assumed that all 8 of checksum's bytes are spaces (0x20=32).
-		// So we need to set this manually.
+	// 	// The checksum is the sum of all bytes in the header,
+	// 	// except we obviously can't include the checksum itself.
+	// 	// So it's assumed that all 8 of checksum's bytes are spaces (0x20=32).
+	// 	// So we need to set this manually.
 
-		const offsetOfChecksumInBytes = 148
-		const numberOfBytesInChecksum = 8
-		const presumedValueOfEachChecksumByte = ' '.charCodeAt(0)
-		for (let i = 0; i < numberOfBytesInChecksum; i++) {
-			const offsetOfByte = offsetOfChecksumInBytes + i
-			thisAsBytes[offsetOfByte] = presumedValueOfEachChecksumByte
-		}
+	// 	const offsetOfChecksumInBytes = 148
+	// 	const numberOfBytesInChecksum = 8
+	// 	const presumedValueOfEachChecksumByte = ' '.charCodeAt(0)
+	// 	for (let i = 0; i < numberOfBytesInChecksum; i++) {
+	// 		const offsetOfByte = offsetOfChecksumInBytes + i
+	// 		thisAsBytes[offsetOfByte] = presumedValueOfEachChecksumByte
+	// 	}
 
-		let checksumSoFar = 0
+	// 	let checksumSoFar = 0
 
-		for (let i = 0; i < thisAsBytes.length; i++) {
-			const byteToAdd = thisAsBytes[i]
-			checksumSoFar += byteToAdd
-		}
+	// 	for (let i = 0; i < thisAsBytes.length; i++) {
+	// 		const byteToAdd = thisAsBytes[i]
+	// 		checksumSoFar += byteToAdd
+	// 	}
 
-		this.checksum = checksumSoFar
+	// 	this.checksum = checksumSoFar
 
-		return this.checksum
-	}
+	// 	return this.checksum
+	// }
 
-	toBytes() {
-		if (!this.typeFlag) {
-			throw Error('Writing without a type flag. ')
-		}
-		const headerAsBytes: number[] = []
-		const writer = new ByteStream(headerAsBytes)
+	// toBytes() {
+	// 	if (!this.typeFlag) {
+	// 		throw Error('Writing without a type flag. ')
+	// 	}
+	// 	const headerAsBytes: number[] = []
+	// 	const writer = new ByteStream(headerAsBytes)
 
-		const fileSizeInBytesAsStringOctal = padLeft(this.fileSizeInBytes.toString(8) + '\0', 12, '0')
-		const checksumAsStringOctal = padLeft(this.checksum.toString(8) + '\0 ', 8, '0')
+	// 	const fileSizeInBytesAsStringOctal = padLeft(this.fileSizeInBytes.toString(8) + '\0', 12, '0')
+	// 	const checksumAsStringOctal = padLeft(this.checksum.toString(8) + '\0 ', 8, '0')
 
-		writer.writeString(this.fileName, 100)
-		writer.writeString(this.fileMode, 8)
-		writer.writeString(this.userIDOfOwner, 8)
-		writer.writeString(this.userIDOfGroup, 8)
-		writer.writeString(fileSizeInBytesAsStringOctal, 12)
-		writer.writeBytes(this.timeModifiedInUnixFormat)
-		writer.writeString(checksumAsStringOctal, 8)
-		writer.writeString(this.typeFlag.value, 1)
-		writer.writeString(this.nameOfLinkedFile, 100)
-		writer.writeString(this.uStarIndicator, 6)
-		writer.writeString(this.uStarVersion, 2)
-		writer.writeString(this.userNameOfOwner, 32)
-		writer.writeString(this.groupNameOfOwner, 32)
-		writer.writeString(this.deviceNumberMajor, 8)
-		writer.writeString(this.deviceNumberMinor, 8)
-		writer.writeString(this.filenamePrefix, 155)
-		writer.writeString(padRight('', 12, '\0')) // reserved
+	// 	writer.writeString(this.fileName, 100)
+	// 	writer.writeString(this.fileMode, 8)
+	// 	writer.writeString(this.userIDOfOwner, 8)
+	// 	writer.writeString(this.userIDOfGroup, 8)
+	// 	writer.writeString(fileSizeInBytesAsStringOctal, 12)
+	// 	writer.writeBytes(this.timeModifiedInUnixFormat)
+	// 	writer.writeString(checksumAsStringOctal, 8)
+	// 	writer.writeString(this.typeFlag.value, 1)
+	// 	writer.writeString(this.nameOfLinkedFile, 100)
+	// 	writer.writeString(this.uStarIndicator, 6)
+	// 	writer.writeString(this.uStarVersion, 2)
+	// 	writer.writeString(this.userNameOfOwner, 32)
+	// 	writer.writeString(this.groupNameOfOwner, 32)
+	// 	writer.writeString(this.deviceNumberMajor, 8)
+	// 	writer.writeString(this.deviceNumberMinor, 8)
+	// 	writer.writeString(this.filenamePrefix, 155)
+	// 	writer.writeString(padRight('', 12, '\0')) // reserved
 
-		return headerAsBytes
-	}
+	// 	return headerAsBytes
+	// }
 
 	// strings
 

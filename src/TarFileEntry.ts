@@ -7,7 +7,7 @@ export class TarFileEntry {
 	header: TarFileEntryHeader
 	dataAsBytes: any
 
-	constructor(header: TarFileEntryHeader, dataAsBytes: any[]) {
+	constructor(header: TarFileEntryHeader, dataAsBytes: Uint8Array) {
 		this.header = header
 		this.dataAsBytes = dataAsBytes
 	}
@@ -16,23 +16,23 @@ export class TarFileEntry {
 
 	// static methods
 
-	static directoryNew(directoryName: any) {
-		const header = TarFileEntryHeader.directoryNew(directoryName)
+	// static directoryNew(directoryName: any) {
+	// 	const header = TarFileEntryHeader.directoryNew(directoryName)
 
-		const entry = new TarFileEntry(header, [])
+	// 	const entry = new TarFileEntry(header, [])
 
-		return entry
-	}
+	// 	return entry
+	// }
 
-	static fileNew(fileName: string, fileContentsAsBytes: number[]) {
-		const header = TarFileEntryHeader.fileNew(fileName, fileContentsAsBytes)
+	// static fileNew(fileName: string, fileContentsAsBytes: number[]) {
+	// 	const header = TarFileEntryHeader.fileNew(fileName, fileContentsAsBytes)
 
-		const entry = new TarFileEntry(header, fileContentsAsBytes)
+	// 	const entry = new TarFileEntry(header, fileContentsAsBytes)
 
-		return entry
-	}
+	// 	return entry
+	// }
 
-	static fromBytes(chunkAsBytes: any[], reader: ByteStream) {
+	static fromBytes(chunkAsBytes: Uint8Array, reader: ByteStream) {
 		const chunkSize = TarFile.ChunkSize
 
 		const header = TarFileEntryHeader.fromBytes(chunkAsBytes)
@@ -52,22 +52,22 @@ export class TarFileEntry {
 		return entry
 	}
 
-	static manyFromByteArrays(
-		fileNamePrefix: number,
-		fileNameSuffix: any,
-		entriesAsByteArrays: string | any[],
-	) {
-		let returnValues = []
+	// static manyFromByteArrays(
+	// 	fileNamePrefix: number,
+	// 	fileNameSuffix: any,
+	// 	entriesAsByteArrays: string | any[],
+	// ) {
+	// 	let returnValues = []
 
-		for (let i = 0; i < entriesAsByteArrays.length; i++) {
-			const entryAsBytes = entriesAsByteArrays[i]
-			const entry = TarFileEntry.fileNew(fileNamePrefix + i + fileNameSuffix, entryAsBytes)
+	// 	for (let i = 0; i < entriesAsByteArrays.length; i++) {
+	// 		const entryAsBytes = entriesAsByteArrays[i]
+	// 		const entry = TarFileEntry.fileNew(fileNamePrefix + i + fileNameSuffix, entryAsBytes)
 
-			returnValues.push(entry)
-		}
+	// 		returnValues.push(entry)
+	// 	}
 
-		return returnValues
-	}
+	// 	return returnValues
+	// }
 
 	// instance methods
 
@@ -75,30 +75,30 @@ export class TarFileEntry {
 		throw Error('Not yet implemented!') // todo
 	}
 
-	toBytes() {
-		let entryAsBytes: number[] = []
+	// toBytes() {
+	// 	let entryAsBytes: number[] = []
 
-		const chunkSize = TarFile.ChunkSize
+	// 	const chunkSize = TarFile.ChunkSize
 
-		const headerAsBytes = this.header.toBytes()
-		entryAsBytes = entryAsBytes.concat(headerAsBytes)
+	// 	const headerAsBytes = this.header.toBytes()
+	// 	entryAsBytes = entryAsBytes.concat(headerAsBytes)
 
-		entryAsBytes = entryAsBytes.concat(this.dataAsBytes)
+	// 	entryAsBytes = entryAsBytes.concat(this.dataAsBytes)
 
-		const sizeOfDataEntryInBytesUnpadded = this.header.fileSizeInBytes
+	// 	const sizeOfDataEntryInBytesUnpadded = this.header.fileSizeInBytes
 
-		const numberOfChunksOccupiedByDataEntry = Math.ceil(sizeOfDataEntryInBytesUnpadded / chunkSize)
+	// 	const numberOfChunksOccupiedByDataEntry = Math.ceil(sizeOfDataEntryInBytesUnpadded / chunkSize)
 
-		const sizeOfDataEntryInBytesPadded = numberOfChunksOccupiedByDataEntry * chunkSize
+	// 	const sizeOfDataEntryInBytesPadded = numberOfChunksOccupiedByDataEntry * chunkSize
 
-		const numberOfBytesOfPadding = sizeOfDataEntryInBytesPadded - sizeOfDataEntryInBytesUnpadded
+	// 	const numberOfBytesOfPadding = sizeOfDataEntryInBytesPadded - sizeOfDataEntryInBytesUnpadded
 
-		for (let i = 0; i < numberOfBytesOfPadding; i++) {
-			entryAsBytes.push(0)
-		}
+	// 	for (let i = 0; i < numberOfBytesOfPadding; i++) {
+	// 		entryAsBytes.push(0)
+	// 	}
 
-		return entryAsBytes
-	}
+	// 	return entryAsBytes
+	// }
 
 	// strings
 

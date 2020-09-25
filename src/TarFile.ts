@@ -18,7 +18,7 @@ export class TarFile {
 
 	// static methods
 
-	static fromBytes(fileName: string, bytes: number[]) {
+	static fromBytes(fileName: string, bytes: Uint8Array) {
 		const reader = new ByteStream(bytes)
 
 		const entries = []
@@ -92,64 +92,64 @@ export class TarFile {
 		}
 	}
 
-	toBytes() {
-		this.toBytes_PrependLongPathEntriesAsNeeded()
+	// toBytes() {
+	// 	this.toBytes_PrependLongPathEntriesAsNeeded()
 
-		let fileAsBytes: number[] = []
+	// 	let fileAsBytes: number[] = []
 
-		// hack - For easier debugging.
-		const entriesAsByteArrays = this.entries.map((x) => x.toBytes())
+	// 	// hack - For easier debugging.
+	// 	const entriesAsByteArrays = this.entries.map((x) => x.toBytes())
 
-		// Now that we've written the bytes for long path entries,
-		// put it back the way it was.
-		this.consolidateLongPathEntries()
+	// 	// Now that we've written the bytes for long path entries,
+	// 	// put it back the way it was.
+	// 	this.consolidateLongPathEntries()
 
-		for (let i = 0; i < entriesAsByteArrays.length; i++) {
-			const entryAsBytes = entriesAsByteArrays[i]
-			fileAsBytes = fileAsBytes.concat(entryAsBytes)
-		}
+	// 	for (let i = 0; i < entriesAsByteArrays.length; i++) {
+	// 		const entryAsBytes = entriesAsByteArrays[i]
+	// 		fileAsBytes = fileAsBytes.concat(entryAsBytes)
+	// 	}
 
-		const chunkSize = TarFile.ChunkSize
+	// 	const chunkSize = TarFile.ChunkSize
 
-		const numberOfZeroChunksToWrite = 2
+	// 	const numberOfZeroChunksToWrite = 2
 
-		for (let i = 0; i < numberOfZeroChunksToWrite; i++) {
-			for (let b = 0; b < chunkSize; b++) {
-				fileAsBytes.push(0)
-			}
-		}
+	// 	for (let i = 0; i < numberOfZeroChunksToWrite; i++) {
+	// 		for (let b = 0; b < chunkSize; b++) {
+	// 			fileAsBytes.push(0)
+	// 		}
+	// 	}
 
-		return fileAsBytes
-	}
+	// 	return fileAsBytes
+	// }
 
-	toBytes_PrependLongPathEntriesAsNeeded() {
-		// TAR file entries with paths longer than 99 chars require cheating,
-		// by prepending them with a entry of type "L" whose data contains the path.
+	// toBytes_PrependLongPathEntriesAsNeeded() {
+	// 	// TAR file entries with paths longer than 99 chars require cheating,
+	// 	// by prepending them with a entry of type "L" whose data contains the path.
 
-		const typeFlagLongPath = TarFileTypeFlag.Instances().LongFilePath
-		const maxLength = TarFileEntryHeader.FileNameMaxLength
+	// 	const typeFlagLongPath = TarFileTypeFlag.Instances().LongFilePath
+	// 	const maxLength = TarFileEntryHeader.FileNameMaxLength
 
-		const entries = this.entries
-		for (let i = 0; i < entries.length; i++) {
-			const entry = entries[i]
-			const entryHeader = entry.header
-			const entryFileName = entryHeader.fileName
-			if (entryFileName.length > maxLength) {
-				const entryFileNameAsBytes = entryFileName.split('').map((x: string) => x.charCodeAt(0))
-				const entryContainingLongPathToPrepend = TarFileEntry.fileNew(
-					typeFlagLongPath.name,
-					entryFileNameAsBytes,
-				)
-				entryContainingLongPathToPrepend.header.typeFlag = typeFlagLongPath
-				entryContainingLongPathToPrepend.header.timeModifiedInUnixFormat =
-					entryHeader.timeModifiedInUnixFormat
-				entryContainingLongPathToPrepend.header.checksumCalculate()
-				entryHeader.fileName = entryFileName.substr(0, maxLength) + String.fromCharCode(0)
-				entries.splice(i, 0, entryContainingLongPathToPrepend)
-				i++
-			}
-		}
-	}
+	// 	const entries = this.entries
+	// 	for (let i = 0; i < entries.length; i++) {
+	// 		const entry = entries[i]
+	// 		const entryHeader = entry.header
+	// 		const entryFileName = entryHeader.fileName
+	// 		if (entryFileName.length > maxLength) {
+	// 			const entryFileNameAsBytes = entryFileName.split('').map((x: string) => x.charCodeAt(0))
+	// 			const entryContainingLongPathToPrepend = TarFileEntry.fileNew(
+	// 				typeFlagLongPath.name,
+	// 				entryFileNameAsBytes,
+	// 			)
+	// 			entryContainingLongPathToPrepend.header.typeFlag = typeFlagLongPath
+	// 			entryContainingLongPathToPrepend.header.timeModifiedInUnixFormat =
+	// 				entryHeader.timeModifiedInUnixFormat
+	// 			entryContainingLongPathToPrepend.header.checksumCalculate()
+	// 			entryHeader.fileName = entryFileName.substr(0, maxLength) + String.fromCharCode(0)
+	// 			entries.splice(i, 0, entryContainingLongPathToPrepend)
+	// 			i++
+	// 		}
+	// 	}
+	// }
 
 	// strings
 
