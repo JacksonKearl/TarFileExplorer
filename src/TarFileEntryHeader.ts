@@ -55,7 +55,11 @@ export class TarFileEntryHeader {
 		this.deviceNumberMajor = deviceNumberMajor
 		this.deviceNumberMinor = deviceNumberMinor
 		this.filenamePrefix = filenamePrefix
-		this.fullFileName = filenamePrefix + fileName
+		this.fullFileName = filenamePrefix.length
+			? filenamePrefix.endsWith('/')
+				? filenamePrefix + fileName
+				: (filenamePrefix + '/') + fileName
+			: fileName
 	}
 
 	// static methods
